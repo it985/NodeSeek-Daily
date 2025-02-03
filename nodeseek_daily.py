@@ -21,7 +21,7 @@ cookie = os.environ.get("NS_COOKIE") or os.environ.get("COOKIE")
 # 通过环境变量控制是否使用无头模式，默认为 True（无头模式）
 headless = os.environ.get("HEADLESS", "true").lower() == "true"
 
-randomInputStr = ["bd","绑定","帮顶"]
+# randomInputStr = ["bd","绑定","帮顶"]
 
 def click_sign_icon(driver):
     """
@@ -157,91 +157,91 @@ def setup_driver_and_cookies():
         print(traceback.format_exc())
         return None
 
-def nodeseek_comment(driver):
-    try:
-        print("正在访问交易区...")
-        target_url = 'https://www.nodeseek.com/categories/trade'
-        driver.get(target_url)
-        print("等待页面加载...")
+# def nodeseek_comment(driver):
+#     try:
+#         print("正在访问交易区...")
+#         target_url = 'https://www.nodeseek.com/categories/trade'
+#         driver.get(target_url)
+#         print("等待页面加载...")
         
-        # 获取初始帖子列表
-        posts = WebDriverWait(driver, 30).until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, '.post-list-item'))
-        )
-        print(f"成功获取到 {len(posts)} 个帖子")
+#         # 获取初始帖子列表
+#         posts = WebDriverWait(driver, 30).until(
+#             EC.presence_of_all_elements_located((By.CSS_SELECTOR, '.post-list-item'))
+#         )
+#         print(f"成功获取到 {len(posts)} 个帖子")
         
-        # 过滤掉置顶帖
-        valid_posts = [post for post in posts if not post.find_elements(By.CSS_SELECTOR, '.pined')]
-        selected_posts = random.sample(valid_posts, min(20, len(valid_posts)))
+#         # 过滤掉置顶帖
+#         valid_posts = [post for post in posts if not post.find_elements(By.CSS_SELECTOR, '.pined')]
+#         selected_posts = random.sample(valid_posts, min(20, len(valid_posts)))
         
-        # 存储已选择的帖子URL
-        selected_urls = []
-        for post in selected_posts:
-            try:
-                post_link = post.find_element(By.CSS_SELECTOR, '.post-title a')
-                selected_urls.append(post_link.get_attribute('href'))
-            except:
-                continue
+#         # 存储已选择的帖子URL
+#         selected_urls = []
+#         for post in selected_posts:
+#             try:
+#                 post_link = post.find_element(By.CSS_SELECTOR, '.post-title a')
+#                 selected_urls.append(post_link.get_attribute('href'))
+#             except:
+#                 continue
         
-        is_chicken_leg = False
+#         is_chicken_leg = False
         
-        # 使用URL列表进行操作
-        for i, post_url in enumerate(selected_urls):
-            try:
-                print(f"正在处理第 {i+1} 个帖子")
-                driver.get(post_url)
+#         # 使用URL列表进行操作
+#         for i, post_url in enumerate(selected_urls):
+#             try:
+#                 print(f"正在处理第 {i+1} 个帖子")
+#                 driver.get(post_url)
                 
-                # 处理加鸡腿
-                if is_chicken_leg is False:
-                    is_chicken_leg = click_chicken_leg(driver)
+#                 # 处理加鸡腿
+#                 if is_chicken_leg is False:
+#                     is_chicken_leg = click_chicken_leg(driver)
                 
-                # 等待 CodeMirror 编辑器加载
-                editor = WebDriverWait(driver, 30).until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, '.CodeMirror'))
-                )
+#                 # 等待 CodeMirror 编辑器加载
+#                 editor = WebDriverWait(driver, 30).until(
+#                     EC.presence_of_element_located((By.CSS_SELECTOR, '.CodeMirror'))
+#                 )
                 
-                # 点击编辑器区域获取焦点
-                editor.click()
-                time.sleep(0.5)
-                input_text = random.choice(randomInputStr)
+#                 # 点击编辑器区域获取焦点
+#                 editor.click()
+#                 time.sleep(0.5)
+#                 input_text = random.choice(randomInputStr)
 
-                # 模拟输入
-                actions = ActionChains(driver)
-                # 随机输入 randomInputStr
-                for char in input_text:
-                    actions.send_keys(char)
-                    actions.pause(random.uniform(0.1, 0.3))
-                actions.perform()
+#                 # 模拟输入
+#                 actions = ActionChains(driver)
+#                 # 随机输入 randomInputStr
+#                 for char in input_text:
+#                     actions.send_keys(char)
+#                     actions.pause(random.uniform(0.1, 0.3))
+#                 actions.perform()
                 
-                # 等待一下确保内容已经输入
-                time.sleep(2)
+#                 # 等待一下确保内容已经输入
+#                 time.sleep(2)
                 
-                # 使用更精确的选择器定位提交按钮
-                submit_button = WebDriverWait(driver, 30).until(
-                 EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'submit') and contains(@class, 'btn') and contains(text(), '发布评论')]"))
-                )
-                # 确保按钮可见并可点击
-                driver.execute_script("arguments[0].scrollIntoView(true);", submit_button)
-                time.sleep(0.5)
-                submit_button.click()
+#                 # 使用更精确的选择器定位提交按钮
+#                 submit_button = WebDriverWait(driver, 30).until(
+#                  EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'submit') and contains(@class, 'btn') and contains(text(), '发布评论')]"))
+#                 )
+#                 # 确保按钮可见并可点击
+#                 driver.execute_script("arguments[0].scrollIntoView(true);", submit_button)
+#                 time.sleep(0.5)
+#                 submit_button.click()
                 
-                print(f"已在帖子 {post_url} 中完成评论")
+#                 print(f"已在帖子 {post_url} 中完成评论")
                 
-                # 返回交易区
-                # driver.get(target_url)
-                # time.sleep(2)  # 等待页面加载
-                time.sleep(random.uniform(2,5))
+#                 # 返回交易区
+#                 # driver.get(target_url)
+#                 # time.sleep(2)  # 等待页面加载
+#                 time.sleep(random.uniform(2,5))
                 
-            except Exception as e:
-                print(f"处理帖子时出错: {str(e)}")
-                continue
+#             except Exception as e:
+#                 print(f"处理帖子时出错: {str(e)}")
+#                 continue
                 
-        print("NodeSeek评论任务完成")
+#         print("NodeSeek评论任务完成")
                 
-    except Exception as e:
-        print(f"NodeSeek评论出错: {str(e)}")
-        print("详细错误信息:")
-        print(traceback.format_exc())
+#     except Exception as e:
+#         print(f"NodeSeek评论出错: {str(e)}")
+#         print("详细错误信息:")
+#         print(traceback.format_exc())
 
 def click_chicken_leg(driver):
     try:
